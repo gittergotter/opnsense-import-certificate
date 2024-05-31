@@ -44,7 +44,16 @@ if (trim(cert_get_subject($certificate, false)) != "CN=".$hostname.",") {
 	die(1);
 }
 $issuer = trim(cert_get_issuer($certificate, false));
-if (strpos($issuer, "O=Let's Encrypt") === false || (strpos($issuer, "CN=R10") === false && strpos($issuer, "CN=R11") === false) || strpos($issuer, "C=US") === false) {
+
+// Define acceptable issuers
+$acceptable_issuers = [
+    "O=Let's Encrypt, CN=R10, C=US",
+    "O=Let's Encrypt, CN=R11, C=US",
+    "O=Let's Encrypt, CN=E5, C=US",
+    "O=Let's Encrypt, CN=E6, C=US"
+];
+
+if (!in_array($issuer, $acceptable_issuers)) {
     echo "The certificate issuer does not match the certificate.\r\n" . $issuer . "\r\n";
     die(1);
 }
