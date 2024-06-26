@@ -39,25 +39,14 @@ if (empty($key)) {
 	echo "The key is empty.\r\n";
 	die(1);
 }
-if (trim(cert_get_subject($certificate, false)) != "CN=".$hostname.",") {
-	echo "The certificate subject does not match the hostname $hostname.\r\n".cert_get_subject($certificate, false)."\r\n";
-	die(1);
-}
-$issuer = trim(cert_get_issuer($certificate, false));
-
-// Define acceptable issuers
-$acceptable_issuers = [
-    "O=Let's Encrypt, CN=R10, C=US",
-    "O=Let's Encrypt, CN=R11, C=US",
-    "O=Let's Encrypt, CN=E5, C=US",
-    "O=Let's Encrypt, CN=E6, C=US"
-];
-
-if (!in_array($issuer, $acceptable_issuers)) {
-    echo "The certificate issuer does not match the certificate.\r\n" . $issuer . "\r\n";
-    die(1);
-}
-
+//if (trim(cert_get_subject($certificate, false)) != "CN=".$hostname.",") {
+//	echo "The certificate subject does not match the hostname $hostname.\r\n".cert_get_subject($certificate, false)."\r\n";
+//	die(1);
+//}
+//if (trim(cert_get_issuer($certificate, false)) != "O=Let's Encrypt, CN=Let's Encrypt Authority X3, C=US,") {
+//	echo "The certificate issuer does not match the certificate.\r\n".cert_get_issuer($certificate, false)."\r\n";
+//	die(1);
+//}
 
 $cert = array();
 $cert['refid'] = uniqid();
