@@ -20,7 +20,7 @@ require_once "config.inc";
 require_once "certs.inc";
 require_once "util.inc";
 
-$descr_prefix = "Certificate added to opnsense through " . basename($argv[0]);
+$descr_prefix = "Certificate added to opnsense through ";
 
 $certificate_raw = file_get_contents($argv[1]);
 if ($certificate_raw === false) {
@@ -67,7 +67,7 @@ $a_cert =& $config['cert'];
 
 $cert = array();
 $cert['refid'] = uniqid();
-$cert['descr'] = $descr_prefix . " on " . date("Y/m/d");
+$cert['descr'] = $descr_prefix . basename($argv[0]) . " on " . date("Y/m/d");
 cert_import($cert, $certificate, $key);
 
 // Already imported? (compare the certificate portion)
@@ -94,7 +94,10 @@ if (!$replaced) {
 
 // Point the GUI at the certificate and write everything out in one go
 $config['system']['webgui']['ssl-certref'] = $cert['refid'];
-write_config("Imported certificate for " . $hostname . " via " . basename($argv[0]));
+if (!is_array(write_config("Imported certificate for " . $hostname . " via " . basename($argv[0])))) {
+        echo "Could not save the configuration.\r\n";
+        die(1);
+}
 
 log_error('Web GUI configuration has changed. Restarting now.');
 configd_run('webgui restart 2', true);
